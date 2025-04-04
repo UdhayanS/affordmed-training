@@ -62,6 +62,37 @@
             <p id="resultDiv" style="color: white;"></p>
         </div>
     </center>
-    <script src="script.js"></script>
+    
+
+    <script>
+        const api_key = "7aebcb723a6f91af7cdeba4df9a7d06a";
+
+async function getLocation() {
+    const city = document.getElementById('locationName').value;
+    const res = document.getElementById('resultDiv');
+
+    if(!city){
+        res.innerHTML = `<p>Not a city</p>`;
+    }
+
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${api_key}`;
+    try{
+        const search = await fetch(url);
+        const data = await search.json();
+
+        if(data.cod===200){
+            res.innerHTML = `
+            <h2>${data.name}, ${data.sys.country}</h2>
+            <p>Temp: ${data.main.temp}°C</p>
+            <p>Condition: ${data.weather[0].description}</p>
+            <p>Humidity: ${data.main.humidity}%</p>
+            `
+        }
+    }
+    catch(error){
+        res.innerHTML = 'Not found';
+    }
+}
+    </script>
 </body>
 </html>
